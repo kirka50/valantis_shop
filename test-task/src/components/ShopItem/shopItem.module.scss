@@ -1,0 +1,16 @@
+.shopItem{
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px;
+  background-color: lightblue;
+  border-radius: 10px;
+  h1 {
+    font-size: 26px;
+    line-height: 1px;
+    color: black;
+    text-wrap: normal;
+  }
+  p {
+    font-size: 22px;
+  }
+}

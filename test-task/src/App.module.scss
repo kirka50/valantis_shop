@@ -1,0 +1,14 @@
+.html, body {
+  margin: 50px 20vh;
+}
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tool--bar {
+  display: flex;
+  flex-direction: column;
+}
