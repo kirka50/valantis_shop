@@ -23,9 +23,10 @@ export function FilterItem({item, chooseFilterItem}){
                 <option></option>
                 {
                     fieldItems ? fieldItems.map((item,index) => {
-                        return <option key={index} value={item}>
-                            {item}
-                        </option>
+                        if(item) { return(
+                            <option key={index} value={item}>
+                                {item}
+                            </option>)}
                     }) : ''
                 }
             </select>

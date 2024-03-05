@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import style from './App.module.scss'
@@ -12,12 +12,11 @@ function App() {
 
 
   const shopItemsId = useShopIds(itemsQty)
-  const shopItems = useShopItem(shopItemsId.data)
+  const [shopItems, setShopItems] = useShopItem(shopItemsId.data)
   const filterFields = useFilterFields()
   const handleQtyChange = (event) => {
     setItemsQty(parseInt(event.target.value))
   }
-
   return (
     <>
         {shopItemsId.loading ? <div>Загрузка базы</div> : shopItems.loading ? <div>Загрузка украшений</div> :

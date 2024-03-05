@@ -30,5 +30,5 @@ export default function useShopItem(shopItemsId= []) {
             })
         }
     }, [shopItemsId]);
-    return {data, error, loading}
+    return [{data, error, loading}, setData]
 }
