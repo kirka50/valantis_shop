@@ -15,7 +15,7 @@ export function useFetch({requestDeps, action, params}) {
             try {
                 setRequest((prev) => ({...prev, isLoading: true}));
                 const response = await axios.post(
-                        'http://api.valantis.store:40000/',
+                        'https://api.valantis.store:40000/',
                         {
                             action: action,
                             params: params
