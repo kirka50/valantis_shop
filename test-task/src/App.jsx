@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import style from './App.module.scss'
@@ -12,18 +12,28 @@ function App() {
   const shopItemsId = useShopIds(itemsQty)
   const [shopItems, setShopItems] = useShopItem(shopItemsId.data)
   const filterFields = useFilterFields()
-  const [filter, setFilter] = useState({})
+  const filter = useRef({})
 
-  const changeFilter = (event, filterField) => {
-    if(filterField in filter) {
-      if (filter.filterField !== event.target.value) {
-        setFilter(prevState =>( {
-          ...prevState,
-          filter.filterField: event.target.value
-        }))
+  const changeFilter = (chosenItem, filterField) => {
+    console.log('comparison', chosenItem, filter.current.filterField)
+    if ([filterField] in filter.current) {
+      if (filter.current.filterField !== chosenItem) {
+        if (chosenItem == '') {
+          const updatedFilter = {...filter.current}
+          delete updatedFilter[filterField]
+          console.log('want to delete')
+          filter.current = updatedFilter
+        } else {
+          filter.current[filterField] = chosenItem;
+          console.log('sas')
+        }
+
       }
+    } else {
+      console.log('sus')
+      filter.current = {...filter.current, [filterField]: chosenItem}
     }
-
+    console.log(filter.current)
   }
   const handleQtyChange = (event) => {
     setItemsQty(parseInt(event.target.value))
@@ -33,7 +43,7 @@ function App() {
       <div style={{display: "flex", gap: '10px'}} className={style.toolBar}>
         {filterFields ? filterFields.map((field,index) => {
           return(
-              <FilterItem key={index} item={field}></FilterItem>
+              <FilterItem key={index} item={field} chooseFilterItem={changeFilter}></FilterItem>
           )
         }) : <div> Нету полей для фильтра</div>}
       </div>

@@ -6,14 +6,14 @@ export function FilterItem({item, chooseFilterItem}){
     const [chosenItem, setChosenItem] = useState()
     const [fieldItems, setFieldItems] = useFilterItems(item)
     const handleChange = (event) => {
-        setChosenItem(event.target.value)
+        chooseFilterItem(event.target.value, item)
     }
 
     if(item == 'product') {
         return(
             <>
                 Поиск по имени:
-                <input/>
+                <input onBlur={handleChange}/>
             </>)
     }
 
