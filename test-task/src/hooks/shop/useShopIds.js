@@ -5,6 +5,7 @@ import removeDoubles from "../../script/removeDoubles.js";
 import fetchApi from "../../script/fetchApi.js";
 
 export default function useShopIds(page) {
+    page = page - 1
     const MAX_RETRIES = 3
     const [retries, setRetries] = useState(0)
     const [data, setData] = useState([])
