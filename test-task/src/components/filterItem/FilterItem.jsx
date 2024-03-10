@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import useFilterItems from "../../hooks/useFilterItems.js";
+import useFilterItems from "../../hooks/filter/useFilterItems.js";
 
 export function FilterItem({item, chooseFilterItem}){
     const isClicked = useRef(false)

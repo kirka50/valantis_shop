@@ -1,7 +1,5 @@
 import {useState, useEffect} from "react";
-import createMD5 from "../script/createMD5.js";
-import axios from 'axios'
-import fetchApi from "../script/fetchApi.js";
+import fetchApi from "../../script/fetchApi.js";
 
 export default function useShopItem(shopItemsId= []) {
     const [data, setData] = useState([
@@ -30,5 +28,5 @@ export default function useShopItem(shopItemsId= []) {
             })
         }
     }, [shopItemsId]);
-    return [{data, error, loading}, setData]
+    return {data, error, loading}
 }

@@ -1,8 +1,11 @@
 import {useEffect, useState} from "react";
-import fetchApi from "../script/fetchApi.js";
+import fetchApi from "../../script/fetchApi.js";
 
 export default function useFilterItems(fieldItem) {
+    const MAX_RETRIES = 3
+    const [retries, setRetries] = useState(0)
     const [fieldItems, setFieldItems] = useState()
+
     const getFields = async () => {
         return await fetchApi(
             'get_fields',
@@ -12,14 +15,20 @@ export default function useFilterItems(fieldItem) {
         )
     }
     useEffect(() => {
+        const fetchItem = () => {
             getFields()
                 .then((res) => {
                     setFieldItems(res.data.result)
                 }).catch((err) => {
                 console.log(err)
-                useFilterItems(fieldItem)
+                if (retries < MAX_RETRIES) {
+                    setRetries(retries + 1)
+                    fetchItem()
+                }
             })
+        }
+        fetchItem()
     }, []);
 
-    return [fieldItems,setFieldItems]
+    return [fieldItems,setFieldItems, retries]
 }

@@ -1,42 +1,55 @@
 import {useEffect, useRef, useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import style from './App.module.scss'
 import ShopItem from "./components/ShopItem/ShopItem";
-import useShopIds from "./hooks/useShopIds.js";
-import useShopItem from "./hooks/useShopItem.js";
-import useFilterFields from "./hooks/useFilterFields.js";
+import useShopIds from "./hooks/shop/useShopIds.js";
+import useFilterFields from "./hooks/filter/useFilterFields.js";
 import {FilterItem} from "./components/filterItem/FilterItem";
+import useFilteredShopItems from "./hooks/shop/useFilteredShopItems.js";
+import useFilter from "./hooks/filter/useFilter.js";
+import Paginator from "./components/Paginator/Paginator";
 function App() {
-  const [itemsQty, setItemsQty] = useState(50)
-  const shopItemsId = useShopIds(itemsQty)
-  const [shopItems, setShopItems] = useShopItem(shopItemsId.data)
+  const itemsQty = 50
   const filterFields = useFilterFields()
-  const filter = useRef({})
+  const [filter,setFilter] = useState({})
+  const [activePage, setActivePage] = useState(1)
+  const shopItemsId = useShopIds(activePage)
+  const filteredIds = useFilter(filter)
+  const shopItems = useFilteredShopItems(shopItemsId.data, filteredIds, activePage)
+
 
   const changeFilter = (chosenItem, filterField) => {
-    console.log('comparison', chosenItem, filter.current.filterField)
-    if ([filterField] in filter.current) {
-      if (filter.current.filterField !== chosenItem) {
+    if ([filterField] in filter) {
+      if (filter.filterField !== chosenItem) {
         if (chosenItem == '') {
-          const updatedFilter = {...filter.current}
+          const updatedFilter = {...filter}
+          console.log('updated filter', updatedFilter)
           delete updatedFilter[filterField]
-          console.log('want to delete')
-          filter.current = updatedFilter
+          setFilter(updatedFilter)
         } else {
-          filter.current[filterField] = chosenItem;
-          console.log('sas')
+          setFilter({...filter, [filterField]: chosenItem})
+          console.log('setted filter', filter)
         }
-
       }
     } else {
-      console.log('sus')
-      filter.current = {...filter.current, [filterField]: chosenItem}
+      setFilter({...filter, [filterField]: chosenItem})
+      console.log('sda filter', filter)
     }
-    console.log(filter.current)
+    console.log(filter)
   }
-  const handleQtyChange = (event) => {
-    setItemsQty(parseInt(event.target.value))
+
+  const nextPage = () => {
+    setActivePage(activePage + 1)
+  }
+  const pervPage = () => {
+    if (activePage - 1 >= 1) {
+      setActivePage(activePage - 1)
+    }
+  }
+
+  const isFilterActive = () => {
+    if (Object.keys(filter) == 0) {
+      return true
+    }
   }
   return (
     <>
@@ -47,15 +60,15 @@ function App() {
           )
         }) : <div> Нету полей для фильтра</div>}
       </div>
-        {shopItemsId.loading ? <div>Загрузка базы</div> : shopItems.loading ? <div>Загрузка украшений</div> :
-            <div>
-              <div className={style.body}>
-                {shopItems.data.map((item,index) => {
-                  return <ShopItem key={index} item={item}/>
-                })}
-              </div>
-            </div>
-}
+      {shopItemsId.loading ? <div>Загрузка базы</div> : shopItems.loading ? <div>Загрузка украшений</div> :
+        <div>
+          <div className={style.body}>
+            {isFilterActive() ? <Paginator selectedPage={activePage} pervPage={pervPage} nextPage={nextPage}/> : '' }
+            {shopItems.data.map((item,index) => {
+              return <ShopItem key={index} item={item}/>
+            })}
+          </div>
+        </div>}
     </>
   )
 }
