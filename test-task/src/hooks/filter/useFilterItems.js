@@ -4,7 +4,7 @@ import fetchApi from "../../script/fetchApi.js";
 export default function useFilterItems(fieldItem) {
     const MAX_RETRIES = 3
     const [retries, setRetries] = useState(0)
-    const [fieldItems, setFieldItems] = useState()
+    const [fieldItems, setFieldItems] = useState([])
 
     const getFields = async () => {
         return await fetchApi(

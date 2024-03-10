@@ -8,7 +8,6 @@ import useFilteredShopItems from "./hooks/shop/useFilteredShopItems.js";
 import useFilter from "./hooks/filter/useFilter.js";
 import Paginator from "./components/Paginator/Paginator";
 function App() {
-  const itemsQty = 50
   const filterFields = useFilterFields()
   const [filter,setFilter] = useState({})
   const [activePage, setActivePage] = useState(1)
@@ -16,7 +15,9 @@ function App() {
   const filteredIds = useFilter(filter)
   const shopItems = useFilteredShopItems(shopItemsId.data, filteredIds, activePage)
 
-
+  function isNumber(str) {
+    return !isNaN(Number(str));
+  }
   const changeFilter = (chosenItem, filterField) => {
     if ([filterField] in filter) {
       if (filter.filterField !== chosenItem) {
@@ -26,12 +27,12 @@ function App() {
           delete updatedFilter[filterField]
           setFilter(updatedFilter)
         } else {
-          setFilter({...filter, [filterField]: chosenItem})
-          console.log('setted filter', filter)
+          setFilter({...filter, [filterField]: isNumber(chosenItem) ? parseInt(chosenItem): chosenItem})
+          console.log('setted filter', (filter))
         }
       }
     } else {
-      setFilter({...filter, [filterField]: chosenItem})
+      setFilter({...filter, [filterField]: isNumber(chosenItem) ? parseInt(chosenItem): chosenItem})
       console.log('sda filter', filter)
     }
     console.log(filter)
@@ -45,7 +46,6 @@ function App() {
       setActivePage(activePage - 1)
     }
   }
-
   const isFilterActive = () => {
     if (Object.keys(filter) == 0) {
       return true

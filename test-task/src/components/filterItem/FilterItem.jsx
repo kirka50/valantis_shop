@@ -8,7 +8,6 @@ export function FilterItem({item, chooseFilterItem}){
     const handleChange = (event) => {
         chooseFilterItem(event.target.value, item)
     }
-
     if(item == 'product') {
         return(
             <>
